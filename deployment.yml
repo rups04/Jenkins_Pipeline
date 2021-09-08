@@ -1,0 +1,48 @@
+########################
+#     --Service--      #
+########################
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myweb
+  labels:
+    app: myweb
+spec:
+  ports:
+    - port: 80
+      nodePort: 30105
+  selector:
+    app: myweb
+    tier: frontend
+  type: NodePort
+
+
+---
+
+########################
+#   -- Deployment--    #
+########################
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: myweb
+spec:
+    replicas: 3
+    selector:
+          matchLabels:
+              app: myweb
+              tier: frontend
+
+    template:
+        metadata:
+            name: myweb
+            labels:
+                app: myweb
+                tier: frontend
+
+        spec:
+            containers:
+                - name: myweb
+                  image: rupali04/webserver:latest
